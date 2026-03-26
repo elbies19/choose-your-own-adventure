@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Your Biggest Lift Right Now?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --scc-green: #016450;
+    --scc-green-light: #028a6e;
+    --scc-green-pale: #e8f5f1;
+    --scc-green-wash: #f4faf8;
+    --scc-dark-gray: #B2B2B2;
+    --scc-light-gray: #D9D9D9;
+    --scc-black: #1a1a1a;
+    --scc-white: #FFFFFF;
+    --shadow-sm: 0 1px 3px rgba(1,100,80,0.08);
+    --shadow-md: 0 4px 16px rgba(1,100,80,0.10);
+    --shadow-lg: 0 8px 32px rgba(1,100,80,0.12);
+    --radius: 12px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+    background: var(--scc-white);
+    color: var(--scc-black);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 3px solid var(--scc-green);
+  }
+
+  .header-eyebrow {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--scc-green);
+    margin-bottom: 0.75rem;
+  }
+
+  .header h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--scc-green);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+
+  .header p {
+    font-size: 1.1rem;
+    color: #4a4a4a;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ── Lift Cards Grid ── */
+  .lifts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 580px) {
+    .lifts-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .lift-card {
+    background: var(--scc-white);
+    border: 2px solid var(--scc-green-pale);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lift-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--scc-green);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .lift-card:hover,
+  .lift-card:focus-visible {
+    border-color: var(--scc-green);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .lift-card:hover::before,
+  .lift-card:focus-visible::before {
+    opacity: 1;
+  }
+
+  .lift-card:focus-visible {
+    outline: 2px solid var(--scc-green);
+    outline-offset: 2px;
+  }
+
+  .lift-card:active {
+    transform: translateY(0);
+  }
+
+  .lift-icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .lift-title {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--scc-green);
+    line-height: 1.4;
+  }
+
+  /* ── Tool Detail View ── */
+  .tool-detail {
+    display: none;
+    animation: fadeSlideIn 0.4s ease forwards;
+  }
+
+  .tool-detail.active {
+    display: block;
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--scc-green);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+    transition: color var(--transition);
+  }
+
+  .back-btn:hover,
+  .back-btn:focus-visible {
+    color: var(--scc-green-light);
+  }
+
+  .back-btn:focus-visible {
+    outline: 2px solid var(--scc-green);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .back-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tool-card-detail {
+    background: var(--scc-green-wash);
+    border: 2px solid var(--scc-green);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+
+  .tool-card-detail .tool-name {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--scc-green);
+    margin-bottom: 0.25rem;
+  }
+
+  .tool-card-detail .tool-tagline {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #5a5a5a;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .tool-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .tool-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .tool-section h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--scc-green);
+    margin-bottom: 0.5rem;
+  }
+
+  .tool-section p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
+  }
+
+  .tool-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--scc-green);
+    color: var(--scc-white);
+    text-decoration: none;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    transition: all var(--transition);
+  }
+
+  .tool-link:hover,
+  .tool-link:focus-visible {
+    background: var(--scc-green-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tool-link:focus-visible {
+    outline: 2px solid var(--scc-green);
+    outline-offset: 4px;
+  }
+
+  .tool-link svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .placeholder-note {
+    font-size: 0.85rem;
+    color: #888;
+    font-style: italic;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--scc-green-pale);
+  }
+
+  .footer p {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  .footer a {
+    color: var(--scc-green);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .footer a:hover,
+  .footer a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .footer a:focus-visible {
+    outline: 2px solid var(--scc-green);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  /* ── Screen reader only ── */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- ====== LANDING VIEW ====== -->
+  <div id="landing-view">
+    <header class="header">
+      <div class="header-eyebrow">SCC Academic Technology</div>
+      <h1>What's Your Biggest Lift Right Now?</h1>
+      <p>You don't need to learn everything — just the right tool for what you're working on. Pick the challenge that's on your mind, and we'll point you somewhere helpful.</p>
+    </header>
+
+    <div class="lifts-grid" role="list" aria-label="Choose your biggest challenge">
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('perusall')" onkeydown="handleCardKey(event, 'perusall')" aria-label="Getting students to actually do the reading — learn about Perusall">
+        <span class="lift-icon" aria-hidden="true">📖</span>
+        <span class="lift-title">Getting students to actually do the reading</span>
+      </div>
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('designplus')" onkeydown="handleCardKey(event, 'designplus')" aria-label="Making my course look more dynamic — learn about DesignPLUS">
+        <span class="lift-icon" aria-hidden="true">🎨</span>
+        <span class="lift-title">Making my course look more dynamic</span>
+      </div>
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('gptzero')" onkeydown="handleCardKey(event, 'gptzero')" aria-label="Navigating AI and academic integrity — learn about GPTZero">
+        <span class="lift-icon" aria-hidden="true">🧭</span>
+        <span class="lift-title">Navigating AI and academic integrity</span>
+      </div>
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('studio')" onkeydown="handleCardKey(event, 'studio')" aria-label="Creating videos I can see if my students watched — learn about Canvas Studio">
+        <span class="lift-icon" aria-hidden="true">🎬</span>
+        <span class="lift-title">Creating videos I can see if my students watched</span>
+      </div>
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('udoit')" onkeydown="handleCardKey(event, 'udoit')" aria-label="Making my course more accessible for everyone — learn about UDOIT">
+        <span class="lift-icon" aria-hidden="true">♿</span>
+        <span class="lift-title">Making my course more accessible for everyone</span>
+      </div>
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('newquizzes')" onkeydown="handleCardKey(event, 'newquizzes')" aria-label="Building better quizzes and assessments — learn about New Quizzes">
+        <span class="lift-icon" aria-hidden="true">✏️</span>
+        <span class="lift-title">Building better quizzes and assessments</span>
+      </div>
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('rubrics')" onkeydown="handleCardKey(event, 'rubrics')" aria-label="Making rubrics that make outcomes assessment easier — learn about Enhanced Rubrics">
+        <span class="lift-icon" aria-hidden="true">📋</span>
+        <span class="lift-title">Making rubrics that make outcomes assessment easier</span>
+      </div>
+
+      <div class="lift-card" role="listitem" tabindex="0" onclick="showTool('ailiteracy')" onkeydown="handleCardKey(event, 'ailiteracy')" aria-label="Curious about AI but not sure where to start — learn about our AI Literacy Training Course">
+        <span class="lift-icon" aria-hidden="true">🤖</span>
+        <span class="lift-title">Curious about AI but not sure where to start</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== TOOL DETAIL VIEWS ====== -->
+
+  <!-- Perusall -->
+  <div id="tool-perusall" class="tool-detail" aria-label="Perusall tool details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">Perusall</h2>
+      <p class="tool-tagline">Collaborative annotation that makes reading social</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>Students aren't doing the reading — or they're skimming it without really engaging. You end up re-teaching everything in class anyway, and discussions fall flat because nobody came prepared.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>Perusall turns reading into a conversation. Students annotate assigned texts together, ask questions in the margins, and respond to each other — all before they walk into your classroom. You can see exactly who engaged, what confused them, and what sparked their interest. It shifts reading from a solo chore to a collaborative activity, and gives you a window into student thinking before class even starts.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Learn more about Perusall">
+          Learn more & get set up
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DesignPLUS -->
+  <div id="tool-designplus" class="tool-detail" aria-label="DesignPLUS tool details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">DesignPLUS</h2>
+      <p class="tool-tagline">Professional course design without needing to be a designer</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>You want your Canvas course to look polished and easy to navigate, but you're not a graphic designer and the default Canvas editor only gets you so far. You see other courses that look great and wonder how they pulled it off.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>DesignPLUS is a browser extension that adds a suite of design tools right inside your Canvas editor. It gives you access to professional-looking headers, banners, buttons, tabs, and layouts — all with a few clicks. You don't need to know any code. It's how many of the best-looking courses on campus were built, and it makes a real difference in how students experience and navigate your course.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Learn more about DesignPLUS">
+          Learn more & get set up
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GPTZero -->
+  <div id="tool-gptzero" class="tool-detail" aria-label="GPTZero tool details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">GPTZero</h2>
+      <p class="tool-tagline">AI literacy tools built for educators, not against students</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>AI is here and your students are using it — but you're not sure how to tell when it's being used inappropriately, and you don't want to become the AI police. You need a tool that helps you navigate this thoughtfully, not one that turns every assignment into a courtroom.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>GPTZero takes an education-first approach to AI and academic integrity. It includes detection capabilities, but more importantly, it offers tools like writing process tracking and citation verification that help you understand <em>how</em> students are working — not just flag them for suspicion. It's designed to support teaching and learning conversations about AI, not shut them down.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Learn more about GPTZero">
+          Learn more & get set up
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas Studio -->
+  <div id="tool-studio" class="tool-detail" aria-label="Canvas Studio tool details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">Canvas Studio</h2>
+      <p class="tool-tagline">Create, share, and track video — all inside Canvas</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>You'd love to use more video in your teaching — screen recordings, mini-lectures, instructional walkthroughs — but you're not sure where to start, and uploading to YouTube feels clunky. More importantly, you want to know if students actually watched what you created.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>Canvas Studio lets you record, upload, and share video directly inside Canvas — no separate platform needed. You can create screen recordings with your webcam overlay, embed videos in any Canvas page or assignment, and add inline quiz questions to keep students engaged. The real game-changer is the analytics: you can see exactly which students watched, how much they watched, and where they dropped off. That's powerful information for follow-up and accountability.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Learn more about Canvas Studio">
+          Learn more & get set up
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- UDOIT -->
+  <div id="tool-udoit" class="tool-detail" aria-label="UDOIT tool details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">UDOIT</h2>
+      <p class="tool-tagline">Make your course work better for every student</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>You want to make sure all of your students can access and use your course materials — including students with visual, hearing, motor, or cognitive disabilities. But accessibility guidelines feel overwhelming, and you're not sure where to start or what you might be missing.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>UDOIT scans your entire Canvas course and flags accessibility issues — missing alt text on images, low color contrast, improperly structured headings, and more. It doesn't just tell you what's wrong; in many cases, it lets you fix the issue right from within the tool. Think of it as a spell-checker, but for accessibility. Making your course more accessible isn't just about compliance — it's about Universal Design for Learning, which means making your materials clearer and more usable for <em>everyone</em>.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Learn more about UDOIT">
+          Learn more & get set up
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Quizzes -->
+  <div id="tool-newquizzes" class="tool-detail" aria-label="New Quizzes tool details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">New Quizzes</h2>
+      <p class="tool-tagline">Assessments that do more than multiple choice</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>Classic Quizzes in Canvas are fine for basic assessments, but they're limited. You want more question types, better options for randomization, and assessments that actually test understanding — not just recall.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>New Quizzes is Canvas's updated assessment engine with a wider range of question types — hotspot, drag-and-drop, categorization, ordering, stimulus-based questions, and more. It offers better item banking, richer moderation tools, and stronger options for building assessments that ask students to think rather than just remember. If you've been frustrated by the limitations of Classic Quizzes, this is the upgrade you've been waiting for.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Learn more about New Quizzes">
+          Learn more & get set up
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Rubrics -->
+  <div id="tool-rubrics" class="tool-detail" aria-label="Enhanced Rubrics tool details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">Enhanced Rubrics</h2>
+      <p class="tool-tagline">Rubrics that work harder so you don't have to</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>You know rubrics are important for consistent grading, but the old rubric tool in Canvas felt clunky and limited. And when it comes time for outcomes assessment and Closing the Loop reporting, pulling rubric data is a headache you dread every semester.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>Enhanced Rubrics is Canvas's redesigned rubric creation tool with a more intuitive interface, better alignment options, and improved integration with outcomes assessment workflows. Building rubrics is faster and more flexible, and the connection between rubric criteria and learning outcomes is cleaner — which means less manual work when it's time to pull data for your assessment reports. Better rubrics up front means less pain at reporting time.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Learn more about Enhanced Rubrics">
+          Learn more & get set up
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Literacy Training Course -->
+  <div id="tool-ailiteracy" class="tool-detail" aria-label="AI Literacy Training Course details">
+    <button class="back-btn" onclick="showLanding()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="tool-card-detail">
+      <h2 class="tool-name">AI Literacy Training Course</h2>
+      <p class="tool-tagline">Learn at your own pace — no judgment, no jargon</p>
+      <div class="tool-section">
+        <h3>The Challenge</h3>
+        <p>AI is everywhere in the news and your students are using tools like ChatGPT — but you haven't had time (or a clear reason) to sit down and really understand what it is, how it works, and what it means for your teaching. You're not against it; you just don't know where to begin, and most of what you've seen is either too technical or too breathless.</p>
+      </div>
+      <div class="tool-section">
+        <h3>How This Helps</h3>
+        <p>This self-paced Canvas course walks you through AI from the ground up — what it is, what it can and can't do, how your students are already using it, and how you might thoughtfully incorporate it into your own teaching. It's organized into four modules: Learn, Read, Practice, and Teach. The goal isn't to make you an AI expert overnight — it's to give you enough understanding to make informed decisions about your own classroom. No hype, no panic, just practical knowledge you can use.</p>
+      </div>
+      <div class="tool-section">
+        <h3>Get Started</h3>
+        <a href="#" class="tool-link" aria-label="Access the AI Literacy Training Course">
+          Go to the course
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <p class="placeholder-note">Link coming soon — reach out to Lauren in the meantime!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <p>Questions? Need help getting started? Reach out to <a href="mailto:lschwartz@salemcc.edu">Lauren Schwartz</a>, Academic Technology Coordinator.</p>
+  </footer>
+</div>
+
+<script>
+  let lastView = 'landing';
+
+  function showLanding() {
+    hideAll();
+    document.getElementById('landing-view').style.display = 'block';
+    document.querySelector('.footer').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showTool(toolId) {
+    hideAll();
+    const el = document.getElementById('tool-' + toolId);
+    if (el) {
+      el.classList.add('active');
+      document.querySelector('.footer').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        el.querySelector('.back-btn').focus();
+      }, 100);
+    }
+  }
+
+  function hideAll() {
+    document.getElementById('landing-view').style.display = 'none';
+    document.querySelectorAll('.tool-detail').forEach(el => el.classList.remove('active'));
+  }
+
+  function handleCardKey(event, toolId) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      showTool(toolId);
+    }
+  }
+</script>
+
+</body>
+</html>
